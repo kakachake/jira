@@ -70,7 +70,7 @@ export const useDebounce = <T>(value: T, delay: number): T => {
 };
 
 //节流hook
-export const useThrottle = (value: unknown, delay: number) => {
+export const useThrottle = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   let timer: React.MutableRefObject<NodeJS.Timeout | null> = useRef(null);
   useEffect(() => {
@@ -88,4 +88,32 @@ export const useThrottle = (value: unknown, delay: number) => {
     }
   }, [value, delay]);
   return debouncedValue;
+};
+
+export const useArray = <T>(
+  array: T[]
+): {
+  value: T[];
+  clear: () => void;
+  removeIndex: (i: number) => void;
+  add: (val: T) => void;
+} => {
+  const [value, setValue] = useState(array);
+  const clear = () => {
+    setValue([]);
+  };
+  const removeIndex = (i: number) => {
+    const arr = [...value];
+    arr.splice(i, 1);
+    setValue(arr);
+  };
+  const add = (val: T) => {
+    setValue([...value, val]);
+  };
+  return {
+    value,
+    clear,
+    removeIndex,
+    add,
+  };
 };

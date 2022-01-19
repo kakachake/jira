@@ -1,6 +1,7 @@
 import React from "react";
 import { List } from "./list";
 import { SearchPanel, User } from "./search-panel";
+import { TsReactTest } from "./try-use-arry";
 import { useEffect, useState } from "react";
 import qs from "qs";
 import { cleanObject, useMount, useDebounce, useThrottle } from "../../utils";
@@ -37,6 +38,7 @@ export const ProjectListScreen: React.FC = () => {
   return (
     <>
       <div>
+        <TsReactTest />
         <SearchPanel param={param} users={users} setParam={setParam} />
         <List users={users} list={list} />
       </div>
