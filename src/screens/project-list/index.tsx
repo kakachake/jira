@@ -1,6 +1,6 @@
 import React from "react";
 import { List } from "./list";
-import { SearchPanel } from "./search-panel";
+import { SearchPanel, User } from "./search-panel";
 import { useEffect, useState } from "react";
 import qs from "qs";
 import { cleanObject, useMount, useDebounce, useThrottle } from "../../utils";
@@ -8,7 +8,7 @@ import { cleanObject, useMount, useDebounce, useThrottle } from "../../utils";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen: React.FC = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers]: [User[], Function] = useState([]);
   const [param, setParam] = useState({
     name: "",
     personId: "",

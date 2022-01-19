@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export const isFalse = (value: any) => {
+export const isFalse = (value: unknown): boolean => {
   return value === 0 ? false : !value;
 };
 
@@ -56,7 +56,7 @@ export const throttle = (func: Function, delay: number, immediate: boolean) => {
 // const log = throttle((arg) => console.log(arg), 1000);
 
 //防抖 hook
-export const useDebounce = (value: any, delay: number) => {
+export const useDebounce = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     //每次在value变化以后，设置一个定时器
@@ -70,7 +70,7 @@ export const useDebounce = (value: any, delay: number) => {
 };
 
 //节流hook
-export const useThrottle = (value: any, delay: number) => {
+export const useThrottle = (value: unknown, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   let timer: React.MutableRefObject<NodeJS.Timeout | null> = useRef(null);
   useEffect(() => {
