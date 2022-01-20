@@ -5,11 +5,12 @@ import { TsReactTest } from "./try-use-arry";
 import { useEffect, useState } from "react";
 import qs from "qs";
 import { cleanObject, useMount, useDebounce, useThrottle } from "../../utils";
+import { useHttp } from "../../utils/http";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen: React.FC = () => {
-  const [users, setUsers]: [User[], Function] = useState([]);
+  const [users, setUsers] = useState([]);
   const [param, setParam] = useState({
     name: "",
     personId: "",
@@ -17,22 +18,15 @@ export const ProjectListScreen: React.FC = () => {
   const [list, setList] = useState([]);
   const debounceParam = useDebounce(param, 200);
   // const throttleParam = useThrottle(param, 2000);
+
+  const client = useHttp();
+
   useMount(() => {
-    fetch(`${apiUrl}/users`).then(async (res) => {
-      if (res.ok) {
-        setUsers(await res.json());
-      }
-    });
+    client(`users`).then(setUsers);
   });
 
   useEffect(() => {
-    fetch(
-      `${apiUrl}/projects?${qs.stringify(cleanObject(debounceParam))}`
-    ).then(async (res) => {
-      if (res.ok) {
-        setList(await res.json());
-      }
-    });
+    client(`projects`, { data: cleanObject(debounceParam) }).then(setList);
   }, [debounceParam]);
 
   return (
