@@ -26,7 +26,7 @@ export const useAsync = <D>(
     ...initialState,
   });
 
-  const setData = (data: D) =>
+  const setData = (data: D | null) =>
     setState({
       data,
       status: "success",
