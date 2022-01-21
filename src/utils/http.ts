@@ -46,6 +46,27 @@ export const useHttp = () => {
 
   console.log(user);
 
+  //TS Utility types 联合类型 Parameter
   return (...[endpoint, config]: Parameters<typeof http>) =>
     http(endpoint, { ...config, token: user?.token });
 };
+let a = typeof http;
+
+//联合类型
+// let a: string | number;
+// a = "string";
+// a = 123;
+
+// 类型别名，这种情况interface没法替代
+// type A = string | number;
+// let a2: A;
+
+//类型别名在很多情况下可以和interface互换
+//interface无法实现Utility type
+type Person = {
+  name: string;
+  age: number;
+};
+
+const xiaoMing: Partial<Person> = { name: "xiaoming" };
+const xiaoHong: Omit<Person, "name"> = { age: 18 };

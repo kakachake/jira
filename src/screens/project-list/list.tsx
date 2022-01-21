@@ -1,3 +1,4 @@
+import { Table } from "antd";
 import React from "react";
 import { User } from "./search-panel";
 
@@ -17,25 +18,28 @@ interface Props {
 export const List: React.FC<Props> = ({ list, users }) => {
   // console.log(users);
   return (
-    <table style={{ margin: "0 auto" }}>
-      <thead>
-        <tr>
-          <th>名称</th>
-          <th>负责人</th>
-        </tr>
-      </thead>
-      <tbody>
-        {list.map((p, i) => (
-          <tr key={i}>
-            <td key={p.name}>{p.name}</td>
-            <td key={p.personId}>
-              {users.find((u) => {
-                return u.id === p.personId;
-              })?.name || "未知"}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Table
+      pagination={false}
+      columns={[
+        {
+          title: "名称",
+          dataIndex: "name",
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+          title: "负责人",
+          render(value, project) {
+            return (
+              <span>
+                {users.find((u) => {
+                  return u.id === project.personId;
+                })?.name || "未知"}
+              </span>
+            );
+          },
+        },
+      ]}
+      dataSource={list}
+    ></Table>
   );
 };
