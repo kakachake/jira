@@ -3,24 +3,40 @@ import qs from "qs";
 import React, { FormEvent, useState } from "react";
 import { LongButton } from ".";
 import { useAuth } from "../context/auth-context";
+import { useAsync } from "../utils/use-async";
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const LoginScreen = () => {
+export const LoginScreen = ({
+  onError,
+}: {
+  onError: (error: Error) => void;
+}) => {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
   const { login, user } = useAuth();
 
-  const handleSubmit = (val: { username: string; password: string }) => {
-    login(val)
+  const handleSubmit = async (val: { username: string; password: string }) => {
+    run(login(val))
       .then((res) => {
         message.success("登陆成功");
       })
-      .catch((res) => {
-        message.error(res.message);
+      .catch((err) => {
+        message.error(err.message);
+        onError(err);
       });
+    //下面这种写法也可以
+    // try {
+    //   await login(val).then((res) => {
+    //     message.success("登陆成功");
+    //   });
+    // } catch (err: any) {
+    //   message.error(err.message);
+    //   onError(err);
+    // }
   };
   return (
     <Form onFinish={handleSubmit}>
@@ -38,7 +54,7 @@ export const LoginScreen = () => {
         <Input.Password placeholder="密码" type="password" />
       </Form.Item>
       <Form.Item>
-        <LongButton htmlType="submit" type={"primary"}>
+        <LongButton loading={isLoading} htmlType="submit" type={"primary"}>
           登录
         </LongButton>
       </Form.Item>

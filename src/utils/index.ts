@@ -4,12 +4,15 @@ export const isFalse = (value: unknown): boolean => {
   return value === 0 ? false : !value;
 };
 
+export const isVoid = (value: unknown) =>
+  value === undefined || value === null || value === "";
+
 //在一个函数里，改变传入的对象本身是不好的
-export const cleanObject = (object: { [key: string]: string }) => {
+export const cleanObject = (object: { [key: string]: unknown }) => {
   // let obj = Object.assign({}, object);
   const result = { ...object };
   for (let key in result) {
-    if (isFalse(result[key])) {
+    if (isVoid(result[key])) {
       delete result[key];
     }
   }
