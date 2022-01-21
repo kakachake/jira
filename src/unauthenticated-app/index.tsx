@@ -14,6 +14,16 @@ export const UnauthenticatedApp = () => {
     <Container>
       <Background />
       <Header />
+      <Button
+        type={"primary"}
+        onClick={() => {
+          console.log(123);
+
+          throw new Error("点击抛出异常");
+        }}
+      >
+        抛出异常
+      </Button>
       <ShadowCard>
         <Title>注册 | 登录</Title>
         {error ? (
