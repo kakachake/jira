@@ -7,7 +7,7 @@ import { User } from "./search-panel";
 
 export interface Project {
   name: string;
-  personId: string;
+  personId: number;
   id: number;
   pin: boolean;
   organization: string;

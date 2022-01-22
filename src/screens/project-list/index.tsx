@@ -17,20 +17,18 @@ import { useAsync } from "../../utils/use-async";
 import { useProjects } from "../../utils/propject";
 import { Button } from "antd";
 import { useUrlQueryParam } from "../../utils/url";
+import { useProjectsSearchParams } from "./util";
+import { useUsers } from "../../utils/user";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen: React.FC = () => {
-  const [users, setUsers] = useState([]);
+  const [param, setParam] = useProjectsSearchParams();
 
-  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   const debounceParam = useDebounce(param, 200);
+  console.log(debounceParam);
   // const throttleParam = useThrottle(param, 2000);
-  const client = useHttp();
-
-  useMount(() => {
-    client(`users`).then(setUsers);
-  });
+  const { data: users } = useUsers();
   const { isLoading, error, data: list } = useProjects(debounceParam);
   useDocumentTitile("项目列表", false);
 
@@ -39,8 +37,8 @@ export const ProjectListScreen: React.FC = () => {
       <Container>
         <h1>项目列表</h1>
         {/* <TsReactTest /> */}
-        <SearchPanel param={param} users={users} setParam={setParam} />
-        <List loading={isLoading} users={users} dataSource={list || []} />
+        <SearchPanel param={param} users={users || []} setParam={setParam} />
+        <List loading={isLoading} users={users || []} dataSource={list || []} />
       </Container>
     </>
   );
