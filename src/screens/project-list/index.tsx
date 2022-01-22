@@ -4,7 +4,13 @@ import { SearchPanel, User } from "./search-panel";
 import { TsReactTest } from "./try-use-arry";
 import { useEffect, useState } from "react";
 import qs from "qs";
-import { cleanObject, useMount, useDebounce, useThrottle } from "../../utils";
+import {
+  cleanObject,
+  useMount,
+  useDebounce,
+  useThrottle,
+  useDocumentTitile,
+} from "../../utils";
 import { useHttp } from "../../utils/http";
 import styled from "@emotion/styled";
 import { useAsync } from "../../utils/use-async";
@@ -26,6 +32,8 @@ export const ProjectListScreen: React.FC = () => {
     client(`users`).then(setUsers);
   });
   const { isLoading, error, data: list } = useProjects(debounceParam);
+
+  useDocumentTitile("项目列表", false);
 
   return (
     <>

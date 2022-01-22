@@ -93,6 +93,7 @@ export const useThrottle = <T>(value: T, delay: number): T => {
   return debouncedValue;
 };
 
+//练习hook
 export const useArray = <T>(
   array: T[]
 ): {
@@ -119,4 +120,27 @@ export const useArray = <T>(
     removeIndex,
     add,
   };
+};
+
+//修改页面标题
+//1. 使用react-helmet
+//2. 自定义hook
+export const useDocumentTitile = (
+  title: string,
+  keepOnUnmount: boolean = true
+) => {
+  const oldTitle = document.title;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  //这个Effect将在页面卸载时被调用
+  useEffect(() => {
+    return () => {
+      if (!keepOnUnmount) {
+        document.title = oldTitle;
+      }
+    };
+  }, []);
 };

@@ -6,24 +6,18 @@ import styled from "@emotion/styled";
 import logo from "../assets/logo.svg";
 import left from "../assets/left.svg";
 import right from "../assets/right.svg";
+import { useDocumentTitile } from "../utils";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  // useDocumentTitile("");
+
   return (
     <Container>
       <Background />
       <Header />
-      <Button
-        type={"primary"}
-        onClick={() => {
-          console.log(123);
-
-          throw new Error("点击抛出异常");
-        }}
-      >
-        抛出异常
-      </Button>
       <ShadowCard>
         <Title>注册 | 登录</Title>
         {error ? (
