@@ -1,9 +1,25 @@
-import { useLocation, useParams } from "react-router";
-import { NavLink } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
+import { Link, NavLink } from "react-router-dom";
+import { KanbanScreen } from "../epic";
+import { EpicScreen } from "../Kanban";
 
 export const ProjectScreen = () => {
   const param = useParams();
   console.log(param);
 
-  return <h1>project screen{param.projectId}</h1>;
+  return (
+    <div>
+      <h1>project screen{param.projectId}</h1>
+      <Link to={"kanban"}>看板</Link>
+      <Link to={"epic"}>任务组</Link>
+      <Routes>
+        <Route path={"/kanban"} element={<KanbanScreen />}></Route>
+        <Route path={"/epic"} element={<EpicScreen />}></Route>
+        <Route
+          path={"/*"}
+          element={<Navigate to={window.location.pathname + "/kanban"} />}
+        ></Route>
+      </Routes>
+    </div>
+  );
 };

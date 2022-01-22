@@ -4,10 +4,11 @@ import { useAuth } from "./context/auth-context";
 import { ProjectListScreen } from "./screens/project-list";
 import { ReactComponent as SoftWareLogo } from "./assets/logo.svg";
 import { Button, Dropdown, Menu } from "antd";
-import { Navigate, Route, Routes } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 import { ProjectScreen } from "./screens/project-screen";
 import { BrowserRouter } from "react-router-dom";
+import { resetRoute } from "./utils";
 
 export const AuthenticatedApp = () => {
   return (
@@ -33,7 +34,12 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <SoftWareLogo width={"10rem"}></SoftWareLogo>
+        <Button style={{ height: "100%" }} type={"link"} onClick={resetRoute}>
+          <SoftWareLogo
+            style={{ display: "block" }}
+            width={"10rem"}
+          ></SoftWareLogo>
+        </Button>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>

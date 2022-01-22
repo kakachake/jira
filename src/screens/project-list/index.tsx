@@ -16,15 +16,14 @@ import styled from "@emotion/styled";
 import { useAsync } from "../../utils/use-async";
 import { useProjects } from "../../utils/propject";
 import { Button } from "antd";
+import { useUrlQueryParam } from "../../utils/url";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen: React.FC = () => {
   const [users, setUsers] = useState([]);
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   const debounceParam = useDebounce(param, 200);
   // const throttleParam = useThrottle(param, 2000);
   const client = useHttp();
@@ -46,6 +45,8 @@ export const ProjectListScreen: React.FC = () => {
     </>
   );
 };
+
+ProjectListScreen["whyDidYouRender"] = true;
 
 const Container = styled.div`
   padding: 3.2rem;

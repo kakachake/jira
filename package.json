@@ -55,5 +55,8 @@
   },
   "msw": {
     "workerDirectory": "public"
+  },
+  "devDependencies": {
+    "@welldone-software/why-did-you-render": "^6.2.3"
   }
 }

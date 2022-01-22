@@ -41,7 +41,7 @@ export const List: React.FC<Props> = ({ users, ...props }) => {
           title: "负责人",
           render(value, project) {
             return (
-              <span>
+              <span key={project.personId}>
                 {users.find((u) => {
                   return u.id === project.personId;
                 })?.name || "未知"}
@@ -53,7 +53,7 @@ export const List: React.FC<Props> = ({ users, ...props }) => {
           title: "创建时间",
           render(value, project) {
             return (
-              <span>
+              <span key={project.created}>
                 {project.created
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
