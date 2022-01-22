@@ -129,7 +129,8 @@ export const useDocumentTitile = (
   title: string,
   keepOnUnmount: boolean = true
 ) => {
-  const oldTitle = document.title;
+  //useRef的值在组件生命周期不会改变
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
     document.title = title;
@@ -139,6 +140,7 @@ export const useDocumentTitile = (
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
+        // 如果不指定依赖，读到的就是旧title
         document.title = oldTitle;
       }
     };

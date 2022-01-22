@@ -1,12 +1,14 @@
 import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React from "react";
+//
+import { NavLink, Link } from "react-router-dom";
 import { User } from "./search-panel";
 
 export interface Project {
   name: string;
   personId: string;
-  id: string;
+  id: number;
   pin: boolean;
   organization: string;
   created: number;
@@ -25,7 +27,9 @@ export const List: React.FC<Props> = ({ users, ...props }) => {
       columns={[
         {
           title: "名称",
-          dataIndex: "organization",
+          render(val, project) {
+            return <Link to={project.id.toString()}>{project.name}</Link>;
+          },
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {

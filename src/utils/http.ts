@@ -29,7 +29,7 @@ export const http = async (
   return window.fetch(`${apiUrl}/${endpoint}`, config).then(async (res) => {
     if (res.status === 401) {
       await auth.logout();
-      window.location.reload();
+      window.location.href = "login";
       return Promise.reject({ message: "请重新登陆" });
     }
     const data = await res.json();

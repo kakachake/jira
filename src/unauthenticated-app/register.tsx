@@ -1,6 +1,7 @@
 import { Button, Form, Input, message } from "antd";
 import qs from "qs";
 import React, { FormEvent, useState } from "react";
+import { useNavigate } from "react-router";
 import { LongButton } from ".";
 import { useAuth } from "../context/auth-context";
 import { useAsync } from "../utils/use-async";
@@ -13,6 +14,7 @@ export const RegisterScreen = ({
 }) => {
   const { register, user } = useAuth();
   const { run, isLoading } = useAsync(undefined, { throwOnError: true });
+  const navigate = useNavigate();
   const handleSubmit = ({
     cpassword,
     ...val
@@ -28,6 +30,7 @@ export const RegisterScreen = ({
     run(register(val))
       .then((res) => {
         message.success("注册成功");
+        navigate("/projects");
       })
       .catch((err) => {
         message.error(err.message);

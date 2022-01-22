@@ -1,6 +1,7 @@
 import { Button, Form, Input, message } from "antd";
 import qs from "qs";
 import React, { FormEvent, useState } from "react";
+import { useNavigate } from "react-router";
 import { LongButton } from ".";
 import { useAuth } from "../context/auth-context";
 import { useAsync } from "../utils/use-async";
@@ -18,11 +19,13 @@ export const LoginScreen = ({
   const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
   const { login, user } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (val: { username: string; password: string }) => {
     run(login(val))
       .then((res) => {
         message.success("登陆成功");
+        navigate("/projects");
       })
       .catch((err) => {
         message.error(err.message);

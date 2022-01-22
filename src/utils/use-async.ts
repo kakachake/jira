@@ -41,7 +41,7 @@ export const useAsync = <D>(
     });
 
   // run用来触发异步请求
-  const run = (promise: Promise<D>) => {
+  const run = (promise: Promise<D | null>) => {
     if (!promise || !promise.then) {
       throw new Error("请传入 Promise 类型数据");
     }

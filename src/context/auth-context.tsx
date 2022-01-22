@@ -17,7 +17,7 @@ const bootstrapUser = async () => {
     const data = await http("me", { token });
     user = data.user;
   }
-  return user;
+  return Promise.resolve(user);
 };
 
 const AuthContext = React.createContext<
