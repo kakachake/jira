@@ -29,16 +29,22 @@ export const ProjectListScreen: React.FC = () => {
   console.log(debounceParam);
   // const throttleParam = useThrottle(param, 2000);
   const { data: users } = useUsers();
-  const { isLoading, error, data: list } = useProjects(debounceParam);
+  const { isLoading, error, data: list, retry } = useProjects(debounceParam);
   useDocumentTitile("项目列表", false);
 
   return (
     <>
       <Container>
         <h1>项目列表</h1>
+        <Button onClick={retry}>刷新</Button>
         {/* <TsReactTest /> */}
         <SearchPanel param={param} users={users || []} setParam={setParam} />
-        <List loading={isLoading} users={users || []} dataSource={list || []} />
+        <List
+          refresh={retry}
+          loading={isLoading}
+          users={users || []}
+          dataSource={list || []}
+        />
       </Container>
     </>
   );

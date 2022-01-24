@@ -1,8 +1,10 @@
-import { Table, TableProps } from "antd";
+import { Rate, Table, TableProps } from "antd";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useEffect, useState } from "react";
 //
 import { NavLink, Link } from "react-router-dom";
+import { Pin } from "../../components/pin";
+import { useEditProject } from "../../utils/propject";
 import { User } from "./search-panel";
 
 export interface Project {
@@ -16,15 +18,31 @@ export interface Project {
 
 interface Props extends TableProps<Project> {
   users: User[];
+  refresh: () => void;
 }
 
-export const List: React.FC<Props> = ({ users, ...props }) => {
+export const List: React.FC<Props> = ({ users, refresh, ...props }) => {
   // console.log(users);
-
+  const { mutate, isSuccess, data } = useEditProject();
+  //函数式编程，柯里化操作
+  const PinProject = (id: number) => (pin: boolean) => {
+    mutate({ id, pin }).then(refresh);
+  };
   return (
     <Table
       pagination={false}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true}></Pin>,
+          render(val, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={PinProject(project.id)}
+              ></Pin>
+            );
+          },
+        },
         {
           title: "名称",
           render(val, project) {

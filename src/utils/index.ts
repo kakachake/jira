@@ -76,6 +76,7 @@ export const useDebounce = <T>(value: T, delay: number): T => {
 export const useThrottle = <T>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   let timer: React.MutableRefObject<NodeJS.Timeout | null> = useRef(null);
+  //useRef 中timer.current的改变不会触发页面的重新渲染
   useEffect(() => {
     //如果当前有定时器，则不做操作
     if (timer.current) {
