@@ -19,10 +19,13 @@ import { Button } from "antd";
 import { useUrlQueryParam } from "../../utils/url";
 import { useProjectsSearchParams } from "./util";
 import { useUsers } from "../../utils/user";
+import { Row } from "../../components/lib";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const ProjectListScreen: React.FC = () => {
+export const ProjectListScreen: React.FC<{
+  setProjectModalOpen: (isOpen: boolean) => void;
+}> = ({ setProjectModalOpen }) => {
   const [param, setParam] = useProjectsSearchParams();
 
   const debounceParam = useDebounce(param, 200);
@@ -35,14 +38,23 @@ export const ProjectListScreen: React.FC = () => {
   return (
     <>
       <Container>
-        <h1>项目列表</h1>
-        <Button onClick={retry}>刷新</Button>
+        <Row between={true}>
+          <h1>项目列表</h1>
+          <Button type={"link"} onClick={() => setProjectModalOpen(true)}>
+            创建项目
+          </Button>
+        </Row>
+
         {/* <TsReactTest /> */}
-        <SearchPanel param={param} users={users || []} setParam={setParam} />
+        <Row style={{ margin: "5px 0" }}>
+          <SearchPanel param={param} users={users || []} setParam={setParam} />
+          <Button onClick={retry}>刷新</Button>
+        </Row>
         <List
           refresh={retry}
           loading={isLoading}
           users={users || []}
+          setProjectModalOpen={setProjectModalOpen}
           dataSource={list || []}
         />
       </Container>

@@ -9,28 +9,39 @@ import { useNavigate, Navigate, Link } from "react-router-dom";
 import { ProjectScreen } from "./screens/project-screen";
 import { BrowserRouter } from "react-router-dom";
 import { resetRoute } from "./utils";
+import { useState } from "react";
+import { ProjectModal } from "./screens/project-list/project-modal";
+import { ProjectPopover } from "./screens/project-list/project-popover";
 
 export const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <div>
-      <PageHeader />
+      <PageHeader setProjectModalOpen={setProjectModalOpen} />
       <Main>
         <Routes>
-          <Route path={"/"} element={<ProjectListScreen />} />
+          <Route
+            path={"/"}
+            element={
+              <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
+            }
+          />
           <Route path={"/:projectId/*"} element={<ProjectScreen />}></Route>
         </Routes>
       </Main>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
     </div>
   );
 };
 
-const PageHeader = () => {
-  const { logout, user } = useAuth();
-  const navigate = useNavigate();
-  const HandleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+const PageHeader = ({
+  setProjectModalOpen,
+}: {
+  setProjectModalOpen: (isOpen: boolean) => void;
+}) => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -40,28 +51,41 @@ const PageHeader = () => {
             width={"10rem"}
           ></SoftWareLogo>
         </Button>
-        <h3>项目</h3>
-        <h3>用户</h3>
+        <ProjectPopover setProjectModalOpen={setProjectModalOpen} />
+        <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item>
-                <Button type={"link"} onClick={HandleLogout}>
-                  登出
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type={"link"}>Hi,{user?.name}</Button>
-        </Dropdown>
+        <User />
       </HeaderRight>
     </Header>
   );
 };
 
+const User = () => {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+  const HandleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item>
+            <Button type={"link"} onClick={HandleLogout}>
+              登出
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type={"link"}>Hi,{user?.name}</Button>
+    </Dropdown>
+  );
+};
+
+//const: temporal dead zone(暂时性死区)
 const Header = styled(Row)`
   padding: 3.2rem;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);

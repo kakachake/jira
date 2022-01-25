@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useMountRef } from ".";
 
 interface State<D> {
   error: Error | null;
@@ -25,51 +26,65 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
-  const [retry, setRetry] = useState(() => () => {});
-  const setData = (data: D | null) =>
-    setState({
-      data,
-      status: "success",
-      error: null,
-    });
+  const mountedRef = useMountRef();
 
-  const setError = (error: Error) =>
-    setState({
-      error,
-      status: "error",
-      data: null,
-    });
+  // useState直接传入函数的含义是：惰性初始化；所以要用useState保存函数，不能直接传入函数
+  const [retry, setRetry] = useState(() => () => {});
+  const setData = useCallback(
+    (data: D | null) =>
+      setState({
+        data,
+        status: "success",
+        error: null,
+      }),
+    []
+  );
+
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        error,
+        status: "error",
+        data: null,
+      }),
+    []
+  );
 
   // run用来触发异步请求
-  const run = (
-    promise: Promise<D | null>,
-    runConfig?: {
-      retry: () => Promise<D | null>;
-    }
-  ) => {
-    if (!promise || !promise.then) {
-      throw new Error("请传入 Promise 类型数据");
-    }
-    if (runConfig?.retry) {
-      setRetry(() => () => {
-        run(runConfig?.retry());
-      });
-    }
-    setState({ ...state, status: "loading" });
-    return promise
-      .then((data) => {
-        setData(data);
-        return data;
-      })
-      .catch((error) => {
-        setError(error);
-        //catch会消化异常，需主动抛出
-        if (config.throwOnError) {
-          return Promise.reject(error);
-        }
-        return error;
-      });
-  };
+  const run = useCallback(
+    (
+      promise: Promise<D | null>,
+      runConfig?: {
+        retry: () => Promise<D | null>;
+      }
+    ) => {
+      if (!promise || !promise.then) {
+        throw new Error("请传入 Promise 类型数据");
+      }
+      if (runConfig?.retry) {
+        setRetry(() => () => {
+          run(runConfig?.retry());
+        });
+      }
+      setState((prevState) => ({ ...prevState, status: "loading" }));
+      return promise
+        .then((data) => {
+          if (mountedRef.current) {
+            setData(data);
+          }
+          return data;
+        })
+        .catch((error) => {
+          setError(error);
+          //catch会消化异常，需主动抛出
+          if (config.throwOnError) {
+            return Promise.reject(error);
+          }
+          return error;
+        });
+    },
+    [config.throwOnError, mountedRef, setData, setError]
+  );
 
   return {
     isIdle: state.status === "idle",

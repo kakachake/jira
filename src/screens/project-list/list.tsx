@@ -1,4 +1,4 @@
-import { Rate, Table, TableProps } from "antd";
+import { Button, Dropdown, Menu, Rate, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 //
@@ -19,10 +19,15 @@ export interface Project {
 interface Props extends TableProps<Project> {
   users: User[];
   refresh: () => void;
+  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
-export const List: React.FC<Props> = ({ users, refresh, ...props }) => {
-  // console.log(users);
+export const List: React.FC<Props> = ({
+  users,
+  refresh,
+  setProjectModalOpen,
+  ...props
+}) => {
   const { mutate, isSuccess, data } = useEditProject();
   //函数式编程，柯里化操作
   const PinProject = (id: number) => (pin: boolean) => {
@@ -76,6 +81,29 @@ export const List: React.FC<Props> = ({ users, refresh, ...props }) => {
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
               </span>
+            );
+          },
+        },
+        {
+          title: "",
+          render(value, project) {
+            return (
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item
+                      onClick={() => {
+                        setProjectModalOpen(true);
+                      }}
+                      key={"edit"}
+                    >
+                      编辑
+                    </Menu.Item>
+                  </Menu>
+                }
+              >
+                <Button type="link">操作</Button>
+              </Dropdown>
             );
           },
         },

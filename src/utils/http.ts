@@ -2,6 +2,7 @@ import qs from "qs";
 import { getToken } from "../auth-provider";
 import * as auth from "../auth-provider";
 import { useAuth } from "../context/auth-context";
+import { useCallback } from "react";
 const apiUrl = process.env.REACT_APP_API_URL;
 interface Config extends RequestInit {
   data?: Object;
@@ -47,8 +48,11 @@ export const useHttp = () => {
   console.log(user);
 
   //TS Utility types 联合类型 Parameter
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    http(endpoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
 };
 let a = typeof http;
 
