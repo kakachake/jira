@@ -13,53 +13,23 @@ import React, { useState } from "react";
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./screens/project-list/project-popover";
 import { useUndo } from "./utils/use-undo";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./screens/project-list/project-list.slice";
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const dispatch = useDispatch();
   return (
     <div>
-      <PageHeader
-        projectButton={
-          <Button
-            onClick={() => {
-              setProjectModalOpen(true);
-            }}
-            type={"link"}
-            style={{ padding: 0 }}
-          >
-            创建项目
-          </Button>
-        }
-      />
+      <PageHeader />
       {/* undo测试 */}
       <Test />
       <Main>
         <Routes>
-          <Route
-            path={"/"}
-            element={
-              <ProjectListScreen
-                projectButton={
-                  <Button
-                    onClick={() => {
-                      setProjectModalOpen(true);
-                    }}
-                    type={"link"}
-                    style={{ padding: 0 }}
-                  >
-                    创建项目
-                  </Button>
-                }
-              />
-            }
-          />
+          <Route path={"/"} element={<ProjectListScreen />} />
           <Route path={"/:projectId/*"} element={<ProjectScreen />}></Route>
         </Routes>
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+      <ProjectModal />
     </div>
   );
 };
@@ -101,7 +71,7 @@ const Test = () => {
   );
 };
 
-const PageHeader = ({ projectButton }: { projectButton: JSX.Element }) => {
+const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -111,7 +81,7 @@ const PageHeader = ({ projectButton }: { projectButton: JSX.Element }) => {
             width={"10rem"}
           ></SoftWareLogo>
         </Button>
-        <ProjectPopover projectButton={projectButton} />
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

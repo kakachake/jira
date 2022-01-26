@@ -5,7 +5,9 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Pin } from "../../components/pin";
 import { useEditProject } from "../../utils/propject";
+import { projectListActions } from "./project-list.slice";
 import { User } from "./search-panel";
+import { useDispatch } from "react-redux";
 
 export interface Project {
   name: string;
@@ -19,20 +21,15 @@ export interface Project {
 interface Props extends TableProps<Project> {
   users: User[];
   refresh: () => void;
-  projectButton: JSX.Element;
 }
 
-export const List: React.FC<Props> = ({
-  users,
-  refresh,
-  projectButton,
-  ...props
-}) => {
+export const List: React.FC<Props> = ({ users, refresh, ...props }) => {
   const { mutate, isSuccess, data } = useEditProject();
   //函数式编程，柯里化操作
   const PinProject = (id: number) => (pin: boolean) => {
     mutate({ id, pin }).then(refresh);
   };
+  const dispatch = useDispatch();
   return (
     <Table
       pagination={false}
@@ -85,17 +82,29 @@ export const List: React.FC<Props> = ({
           },
         },
         {
-          title: "",
+          title: "操作",
           render(value, project) {
             return (
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item key={"edit"}>{projectButton}</Menu.Item>
+                    <Menu.Item key={"edit"}>
+                      {" "}
+                      <Button
+                        type={"link"}
+                        onClick={() =>
+                          dispatch(projectListActions.openProjectModal())
+                        }
+                      >
+                        创建项目
+                      </Button>
+                    </Menu.Item>
                   </Menu>
                 }
               >
-                <Button type="link">操作</Button>
+                <Button type="link" style={{ padding: 0 }}>
+                  操作
+                </Button>
               </Dropdown>
             );
           },

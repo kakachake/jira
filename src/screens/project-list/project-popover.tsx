@@ -3,12 +3,11 @@ import { Button, Divider, Popover, Typography } from "antd";
 import { List } from "antd";
 import { useState } from "react";
 import { useProjects } from "../../utils/propject";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 
-export const ProjectPopover = ({
-  projectButton,
-}: {
-  projectButton: JSX.Element;
-}) => {
+export const ProjectPopover = () => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const { data: projects, isLoading, retry } = useProjects();
   const pinnedProjects = projects?.filter((project) => project.pin);
@@ -26,7 +25,15 @@ export const ProjectPopover = ({
         ))}
       </List>
       <Divider></Divider>
-      {projectButton}
+      <Button
+        type={"link"}
+        onClick={() => {
+          dispatch(projectListActions.openProjectModal());
+          handleHoverChange(false);
+        }}
+      >
+        创建项目
+      </Button>
     </ContentContainer>
   );
   return (

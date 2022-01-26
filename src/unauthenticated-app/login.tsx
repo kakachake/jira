@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { LongButton } from ".";
 import { useAuth } from "../context/auth-context";
 import { useAsync } from "../utils/use-async";
-const apiUrl = process.env.REACT_APP_API_URL;
+import { useDispatch } from "react-redux";
 
 export const LoginScreen = ({
   onError,
@@ -20,7 +20,6 @@ export const LoginScreen = ({
 
   const { login, user } = useAuth();
   const navigate = useNavigate();
-
   const handleSubmit = async (val: { username: string; password: string }) => {
     run(login(val))
       .then((res) => {
