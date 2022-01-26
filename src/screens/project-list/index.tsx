@@ -24,8 +24,9 @@ import { Row } from "../../components/lib";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ProjectListScreen: React.FC<{
-  setProjectModalOpen: (isOpen: boolean) => void;
-}> = ({ setProjectModalOpen }) => {
+  // setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
+}> = ({ projectButton }) => {
   const [param, setParam] = useProjectsSearchParams();
 
   const debounceParam = useDebounce(param, 200);
@@ -40,9 +41,7 @@ export const ProjectListScreen: React.FC<{
       <Container>
         <Row between={true}>
           <h1>项目列表</h1>
-          <Button type={"link"} onClick={() => setProjectModalOpen(true)}>
-            创建项目
-          </Button>
+          {projectButton}
         </Row>
 
         {/* <TsReactTest /> */}
@@ -54,7 +53,7 @@ export const ProjectListScreen: React.FC<{
           refresh={retry}
           loading={isLoading}
           users={users || []}
-          setProjectModalOpen={setProjectModalOpen}
+          projectButton={projectButton}
           dataSource={list || []}
         />
       </Container>

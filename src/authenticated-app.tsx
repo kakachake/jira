@@ -9,21 +9,48 @@ import { useNavigate, Navigate, Link } from "react-router-dom";
 import { ProjectScreen } from "./screens/project-screen";
 import { BrowserRouter } from "react-router-dom";
 import { resetRoute } from "./utils";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./screens/project-list/project-popover";
+import { useUndo } from "./utils/use-undo";
 
 export const AuthenticatedApp = () => {
   const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <div>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
+      <PageHeader
+        projectButton={
+          <Button
+            onClick={() => {
+              setProjectModalOpen(true);
+            }}
+            type={"link"}
+            style={{ padding: 0 }}
+          >
+            创建项目
+          </Button>
+        }
+      />
+      {/* undo测试 */}
+      <Test />
       <Main>
         <Routes>
           <Route
             path={"/"}
             element={
-              <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
+              <ProjectListScreen
+                projectButton={
+                  <Button
+                    onClick={() => {
+                      setProjectModalOpen(true);
+                    }}
+                    type={"link"}
+                    style={{ padding: 0 }}
+                  >
+                    创建项目
+                  </Button>
+                }
+              />
             }
           />
           <Route path={"/:projectId/*"} element={<ProjectScreen />}></Route>
@@ -37,11 +64,44 @@ export const AuthenticatedApp = () => {
   );
 };
 
-const PageHeader = ({
-  setProjectModalOpen,
-}: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+//undo测试
+const Test = () => {
+  const [
+    { past, present: presentCount, future },
+    {
+      set: setCount,
+      reset: resetCount,
+      undo: undoCount,
+      redo: redoCount,
+      canRedo,
+      canUndo,
+    },
+  ] = useUndo<number>(0);
+  return (
+    <>
+      <div>past数组：{past.join()}</div>
+      <div>当前值：{presentCount}</div>
+      <div>future数组：{future.join()}</div>
+      <Button key="increment" onClick={() => setCount(presentCount + 1)}>
+        +
+      </Button>{" "}
+      <Button key="decrement" onClick={() => setCount(presentCount - 1)}>
+        -
+      </Button>{" "}
+      <Button key="undo" onClick={undoCount} disabled={!canUndo}>
+        undo
+      </Button>{" "}
+      <Button key="redo" onClick={redoCount} disabled={!canRedo}>
+        redo
+      </Button>
+      <Button key="reset" onClick={() => resetCount(0)}>
+        reset to 0
+      </Button>
+    </>
+  );
+};
+
+const PageHeader = ({ projectButton }: { projectButton: JSX.Element }) => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -51,7 +111,7 @@ const PageHeader = ({
             width={"10rem"}
           ></SoftWareLogo>
         </Button>
-        <ProjectPopover setProjectModalOpen={setProjectModalOpen} />
+        <ProjectPopover projectButton={projectButton} />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

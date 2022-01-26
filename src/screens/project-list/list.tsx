@@ -19,13 +19,13 @@ export interface Project {
 interface Props extends TableProps<Project> {
   users: User[];
   refresh: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }
 
 export const List: React.FC<Props> = ({
   users,
   refresh,
-  setProjectModalOpen,
+  projectButton,
   ...props
 }) => {
   const { mutate, isSuccess, data } = useEditProject();
@@ -91,14 +91,7 @@ export const List: React.FC<Props> = ({
               <Dropdown
                 overlay={
                   <Menu>
-                    <Menu.Item
-                      onClick={() => {
-                        setProjectModalOpen(true);
-                      }}
-                      key={"edit"}
-                    >
-                      编辑
-                    </Menu.Item>
+                    <Menu.Item key={"edit"}>{projectButton}</Menu.Item>
                   </Menu>
                 }
               >

@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useProjects } from "../../utils/propject";
 
 export const ProjectPopover = ({
-  setProjectModalOpen,
+  projectButton,
 }: {
-  setProjectModalOpen: (isOpen: boolean) => void;
+  projectButton: JSX.Element;
 }) => {
   const [visible, setVisible] = useState(false);
   const { data: projects, isLoading, retry } = useProjects();
@@ -26,17 +26,7 @@ export const ProjectPopover = ({
         ))}
       </List>
       <Divider></Divider>
-      <Button
-        onClick={() => {
-          setProjectModalOpen(true);
-          //关闭hover
-          handleHoverChange(false);
-        }}
-        type={"link"}
-        style={{ padding: 0 }}
-      >
-        创建项目
-      </Button>
+      {projectButton}
     </ContentContainer>
   );
   return (
