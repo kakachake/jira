@@ -1,6 +1,7 @@
 import React from "react";
-import { List, Project } from "./list";
-import { SearchPanel, User } from "./search-panel";
+import { List } from "./list";
+import { SearchPanel } from "./search-panel";
+import { User } from "../../types/User";
 import { TsReactTest } from "./try-use-arry";
 import { useEffect, useState } from "react";
 import qs from "qs";

@@ -2,16 +2,8 @@ import { Form, Input, Select } from "antd";
 import React from "react";
 import { IdSelect } from "../../components/id-select";
 import { UserSelect } from "../../components/user-select";
-import { Project } from "./list";
-
-export interface User {
-  name: string;
-  id: number;
-  email: string;
-  title: string;
-  organization: string;
-  token: string;
-}
+import { Project } from "../../types/index";
+import { User } from "../../types/User";
 
 interface Props {
   param: Partial<Pick<Project, "name" | "personId">>;

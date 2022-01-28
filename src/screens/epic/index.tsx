@@ -1,5 +1,5 @@
 import React from "react";
 
-export const KanbanScreen = () => {
-  return <h1>看板</h1>;
+export const EpicScreen = () => {
+  return <h1>epic</h1>;
 };

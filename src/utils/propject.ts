@@ -1,7 +1,8 @@
+import { message } from "antd";
 import { useCallback, useEffect } from "react";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { cleanObject } from ".";
-import { Project } from "../screens/project-list/list";
+import { Project } from "../types/index";
 import { useProjectsSearchParams } from "../screens/project-list/util";
 import { useHttp } from "./http";
 import { useAsync } from "./use-async";

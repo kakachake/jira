@@ -5,17 +5,9 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Pin } from "../../components/pin";
 import { useDeleteProject, useEditProject } from "../../utils/propject";
-import { User } from "./search-panel";
+import { Project } from "../../types/index";
+import { User } from "../../types/User";
 import { useProjectModal, useProjectsQueryKey } from "./util";
-
-export interface Project {
-  name: string;
-  personId: number;
-  id: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
 
 interface Props extends TableProps<Project> {
   users: User[];

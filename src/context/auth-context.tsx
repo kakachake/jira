@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useQueryClient } from "react-query";
 import * as auth from "../auth-provider";
 import { FullPageErrorFallback, FullPageLoading } from "../components/lib";
-import { User } from "../screens/project-list/search-panel";
+import { User } from "../types/User";
 import { useMount } from "../utils";
 import { http } from "../utils/http";
 import { useAsync } from "../utils/use-async";
@@ -43,11 +44,17 @@ export const AuthProvider: React.FC = ({ children }) => {
     isError,
   } = useAsync<User>();
 
+  const queryClient = useQueryClient();
+
   const login = (form: AuthForm) => auth.login(form).then(setUser);
 
   const register = (form: AuthForm) => auth.register(form).then(setUser);
 
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      queryClient.clear();
+    });
 
   useMount(async () => {
     await run(bootstrapUser());

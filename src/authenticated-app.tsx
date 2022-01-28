@@ -2,14 +2,14 @@ import styled from "@emotion/styled";
 import { Row } from "./components/lib";
 import { useAuth } from "./context/auth-context";
 import { ProjectListScreen } from "./screens/project-list";
-import { ReactComponent as SoftWareLogo } from "./assets/logo.svg";
+import { ReactComponent as SoftWareLogo } from "./assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import { Route, Routes } from "react-router";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 import { ProjectScreen } from "./screens/project-screen";
-import { BrowserRouter } from "react-router-dom";
+
 import { resetRoute } from "./utils";
-import { useState } from "react";
+
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./screens/project-list/project-popover";
 
@@ -35,7 +35,7 @@ const PageHeader = () => {
         <Button style={{ height: "100%" }} type={"link"} onClick={resetRoute}>
           <SoftWareLogo
             style={{ display: "block" }}
-            width={"10rem"}
+            width={"18rem"}
           ></SoftWareLogo>
         </Button>
         <ProjectPopover />

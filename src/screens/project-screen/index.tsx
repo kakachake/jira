@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router";
 import { Link, NavLink } from "react-router-dom";
-import { KanbanScreen } from "../epic";
-import { EpicScreen } from "../Kanban";
+import { KanbanScreen } from "../kanban";
+import { EpicScreen } from "../epic";
 
 export const ProjectScreen = () => {
   const param = useParams();
@@ -17,7 +17,12 @@ export const ProjectScreen = () => {
         <Route path={"/epic"} element={<EpicScreen />}></Route>
         <Route
           path={"/*"}
-          element={<Navigate to={window.location.pathname + "/kanban"} />}
+          element={
+            <Navigate
+              to={window.location.pathname + "/kanban"}
+              replace={true}
+            />
+          }
         ></Route>
       </Routes>
     </div>
