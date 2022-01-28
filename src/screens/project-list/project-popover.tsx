@@ -3,18 +3,18 @@ import { Button, Divider, Popover, Typography } from "antd";
 import { List } from "antd";
 import { useState } from "react";
 import { useProjects } from "../../utils/propject";
+import { useProjectModal } from "./util";
 
-export const ProjectPopover = ({
-  setProjectModalOpen,
-}: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+export const ProjectPopover = () => {
+  console.log("render");
+
   const [visible, setVisible] = useState(false);
-  const { data: projects, isLoading, retry } = useProjects();
+  const { data: projects, isLoading } = useProjects();
   const pinnedProjects = projects?.filter((project) => project.pin);
   const handleHoverChange = (visible) => {
     setVisible(visible);
   };
+  const { open } = useProjectModal();
   const content = (
     <ContentContainer>
       <Typography.Text type={"secondary"}>收藏项目</Typography.Text>
@@ -28,7 +28,7 @@ export const ProjectPopover = ({
       <Divider></Divider>
       <Button
         onClick={() => {
-          setProjectModalOpen(true);
+          open();
           //关闭hover
           handleHoverChange(false);
         }}

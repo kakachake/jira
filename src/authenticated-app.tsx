@@ -14,34 +14,21 @@ import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./screens/project-list/project-popover";
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <div>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
+      <PageHeader />
       <Main>
         <Routes>
-          <Route
-            path={"/"}
-            element={
-              <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
-            }
-          />
+          <Route path={"/"} element={<ProjectListScreen />} />
           <Route path={"/:projectId/*"} element={<ProjectScreen />}></Route>
         </Routes>
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+      <ProjectModal />
     </div>
   );
 };
 
-const PageHeader = ({
-  setProjectModalOpen,
-}: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -51,7 +38,7 @@ const PageHeader = ({
             width={"10rem"}
           ></SoftWareLogo>
         </Button>
-        <ProjectPopover setProjectModalOpen={setProjectModalOpen} />
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

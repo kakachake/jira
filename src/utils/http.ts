@@ -45,7 +45,7 @@ export const http = async (
 export const useHttp = () => {
   const { user } = useAuth();
 
-  console.log(user);
+  // console.log(user);
 
   //TS Utility types 联合类型 Parameter
   return useCallback(

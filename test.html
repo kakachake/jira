@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      Array.prototype.myForEach = async function (cb) {
+        console.log(this);
+        for (let i = 0; i < this.length; i++) {
+          await cb.call(this, this[i], i, this);
+        }
+      };
+      const arr = [
+        () => {
+          console.log(1);
+        },
+        () => sleep(1000),
+        () => {
+          console.log(2);
+        },
+        () => sleep(2000),
+        () => {
+          console.log(3);
+        },
+        () => sleep(3000),
+        () => {
+          console.log(4);
+        },
+      ];
+      const sleep = (delay) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, delay);
+        });
+      };
+      const fun = async (arr) => {
+        for (let i = 0; i < arr.length; i++) {
+          await arr[i]();
+        }
+      };
+      // fun(arr);
+      arr.myForEach((item) => {
+        return item();
+      });
+    </script>
+  </body>
+</html>

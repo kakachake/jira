@@ -15,24 +15,24 @@ import { useHttp } from "../../utils/http";
 import styled from "@emotion/styled";
 import { useAsync } from "../../utils/use-async";
 import { useProjects } from "../../utils/propject";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import { useUrlQueryParam } from "../../utils/url";
-import { useProjectsSearchParams } from "./util";
+import { useProjectModal, useProjectsSearchParams } from "./util";
 import { useUsers } from "../../utils/user";
-import { Row } from "../../components/lib";
+import { ErrorBox, Row } from "../../components/lib";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const ProjectListScreen: React.FC<{
-  setProjectModalOpen: (isOpen: boolean) => void;
-}> = ({ setProjectModalOpen }) => {
-  const [param, setParam] = useProjectsSearchParams();
+export const ProjectListScreen: React.FC = () => {
+  console.log("ProjectListScreen");
 
-  const debounceParam = useDebounce(param, 200);
-  console.log(debounceParam);
+  const [param, setParam] = useProjectsSearchParams();
+  const { open } = useProjectModal();
+
   // const throttleParam = useThrottle(param, 2000);
   const { data: users } = useUsers();
-  const { isLoading, error, data: list, retry } = useProjects(debounceParam);
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 200));
+
   useDocumentTitile("项目列表", false);
 
   return (
@@ -40,7 +40,7 @@ export const ProjectListScreen: React.FC<{
       <Container>
         <Row between={true}>
           <h1>项目列表</h1>
-          <Button type={"link"} onClick={() => setProjectModalOpen(true)}>
+          <Button type={"link"} onClick={() => open()}>
             创建项目
           </Button>
         </Row>
@@ -48,13 +48,13 @@ export const ProjectListScreen: React.FC<{
         {/* <TsReactTest /> */}
         <Row style={{ margin: "5px 0" }}>
           <SearchPanel param={param} users={users || []} setParam={setParam} />
-          <Button onClick={retry}>刷新</Button>
+          <Button onClick={() => {}}>刷新</Button>
         </Row>
+        {error ? <ErrorBox error={error}></ErrorBox> : null}
         <List
-          refresh={retry}
+          refresh={() => {}}
           loading={isLoading}
           users={users || []}
-          setProjectModalOpen={setProjectModalOpen}
           dataSource={list || []}
         />
       </Container>
@@ -62,7 +62,7 @@ export const ProjectListScreen: React.FC<{
   );
 };
 
-ProjectListScreen["whyDidYouRender"] = true;
+// ProjectListScreen["whyDidYouRender"] = true;
 
 const Container = styled.div`
   padding: 3.2rem;

@@ -24,7 +24,12 @@ function App() {
                 user ? <Navigate to="/projects" /> : <Navigate to="/login" />
               }
             />
-            <Route path={"/login"} element={<UnauthenticatedApp />}></Route>
+            <Route
+              path={"/login"}
+              element={
+                !user ? <UnauthenticatedApp /> : <Navigate to="/projects" />
+              }
+            ></Route>
             <Route path={"/projects/*"} element={<AuthenticatedApp />}></Route>
           </Routes>
         </BrowserRouter>

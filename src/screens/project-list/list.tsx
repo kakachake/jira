@@ -1,11 +1,12 @@
-import { Button, Dropdown, Menu, Rate, Table, TableProps } from "antd";
+import { Button, Dropdown, Menu, Modal, Rate, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 //
 import { NavLink, Link } from "react-router-dom";
 import { Pin } from "../../components/pin";
-import { useEditProject } from "../../utils/propject";
+import { useDeleteProject, useEditProject } from "../../utils/propject";
 import { User } from "./search-panel";
+import { useProjectModal, useProjectsQueryKey } from "./util";
 
 export interface Project {
   name: string;
@@ -19,20 +20,28 @@ export interface Project {
 interface Props extends TableProps<Project> {
   users: User[];
   refresh: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
 }
 
-export const List: React.FC<Props> = ({
-  users,
-  refresh,
-  setProjectModalOpen,
-  ...props
-}) => {
-  const { mutate, isSuccess, data } = useEditProject();
+export const List: React.FC<Props> = ({ users, refresh, ...props }) => {
+  const { mutate, isSuccess, data } = useEditProject(useProjectsQueryKey());
   //函数式编程，柯里化操作
   const PinProject = (id: number) => (pin: boolean) => {
-    mutate({ id, pin }).then(refresh);
+    mutate({ id, pin });
   };
+  const { startEdit } = useProjectModal();
+  const { mutate: delMutate } = useDeleteProject(useProjectsQueryKey());
+
+  const confirmDeleteProject = (id: number) => {
+    Modal.confirm({
+      title: "确定删除这个项目吗？",
+      content: "点击确定删除",
+      okText: "确定",
+      onOk() {
+        delMutate(id);
+      },
+    });
+  };
+
   return (
     <Table
       pagination={false}
@@ -51,7 +60,7 @@ export const List: React.FC<Props> = ({
         {
           title: "名称",
           render(val, project) {
-            return <Link to={project.id.toString()}>{project.name}</Link>;
+            return <Link to={String(project.id)}>{project.name}</Link>;
           },
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
@@ -93,11 +102,19 @@ export const List: React.FC<Props> = ({
                   <Menu>
                     <Menu.Item
                       onClick={() => {
-                        setProjectModalOpen(true);
+                        startEdit(project.id);
                       }}
                       key={"edit"}
                     >
                       编辑
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => {
+                        confirmDeleteProject(project.id);
+                      }}
+                      key={"delete"}
+                    >
+                      删除
                     </Menu.Item>
                   </Menu>
                 }
