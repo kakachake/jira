@@ -63,3 +63,10 @@ export const ScreenContainer = styled.div`
   flex-direction: column;
   height: 100%;
 `;
+
+export const Loading: React.FC<{ loading: boolean }> = ({
+  loading,
+  children,
+}) => {
+  return <>{loading ? <Spin size={"large"}></Spin> : children}</>;
+};

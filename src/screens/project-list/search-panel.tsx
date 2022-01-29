@@ -21,7 +21,6 @@ export const SearchPanel: React.FC<Props> = ({ param, setParam, users }) => {
           value={param.name}
           onChange={(e) => {
             setParam({
-              ...param,
               name: e.target.value,
             });
           }}
@@ -32,7 +31,6 @@ export const SearchPanel: React.FC<Props> = ({ param, setParam, users }) => {
           value={param.personId}
           onChange={(value: number | undefined) =>
             setParam({
-              ...param,
               personId: value,
             })
           }

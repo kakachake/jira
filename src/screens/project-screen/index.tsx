@@ -51,6 +51,7 @@ const Aside = styled.aside`
 
 const Main = styled.div`
   box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 `;
 
 const Contanier = styled.div`

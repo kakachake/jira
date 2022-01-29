@@ -19,12 +19,15 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
       [searchParams]
     ),
     (params: Partial<{ [key in K]: unknown }>) => {
+      console.log(params);
+
       return setSearchParam(params);
     },
   ] as const;
 };
 
 //const a = [12, "13", { id: 14 }] as const;
+
 export const useSetUrlSearchParam = () => {
   const [searchParams, setSearchParam] = useSearchParams();
   return (params: { [key in string]: unknown }) => {

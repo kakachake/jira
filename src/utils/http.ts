@@ -54,7 +54,6 @@ export const useHttp = () => {
     [user?.token]
   );
 };
-let a = typeof http;
 
 //联合类型
 // let a: string | number;

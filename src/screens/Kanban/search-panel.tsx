@@ -7,6 +7,7 @@ import { useTasksSearchParams } from "./util";
 
 export const SearchPanel = () => {
   const [searchParams, setSearchParams] = useTasksSearchParams();
+
   const reset = () => {
     setSearchParams({
       typeId: undefined,
@@ -23,7 +24,7 @@ export const SearchPanel = () => {
         placeholder={"任务名"}
         value={searchParams.name}
         onChange={(evt) => setSearchParams({ name: evt.target.value })}
-      ></Input>
+      />
       <UserSelect
         defaultOptionName="经办人"
         value={searchParams.processorId}
