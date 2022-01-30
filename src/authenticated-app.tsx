@@ -12,6 +12,7 @@ import { resetRoute } from "./utils";
 
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./screens/project-list/project-popover";
+import { UserPopover } from "components/user-popover";
 
 export const AuthenticatedApp = () => {
   return (
@@ -39,7 +40,7 @@ const PageHeader = () => {
           ></SoftWareLogo>
         </Button>
         <ProjectPopover />
-        <span>用户</span>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />

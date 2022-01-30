@@ -9,10 +9,11 @@ export const ProjectPopover = () => {
   console.log("render");
 
   const [visible, setVisible] = useState(false);
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, refetch } = useProjects();
   const pinnedProjects = projects?.filter((project) => project.pin);
   const handleHoverChange = (visible) => {
     setVisible(visible);
+    refetch();
   };
   const { open } = useProjectModal();
   const content = (
