@@ -11,6 +11,12 @@ import { CreateTask } from "./create-task";
 import { Task } from "../../types/task";
 import { Mark } from "../../components/mark";
 import { useDeleteKanban } from "../../utils/kanban";
+import {
+  Drag,
+  DragChild,
+  Drop,
+  DropChild,
+} from "../../components/drag-and-drop";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -44,15 +50,27 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
     <Container>
       <Row between={true}>
         <h3>{kanban.name}</h3>
-        <More kanban={kanban}></More>
+        <More kanban={kanban} key={kanban.id}></More>
       </Row>
       <TaskContainer>
-        <Loading loading={isLoading}>
-          {tasks?.map((task) => (
-            <TaskCard task={task} />
-          ))}
-          <CreateTask kanbanId={kanban.id} />
-        </Loading>
+        <Drop type={"row"} direction={"vertical"} droppableId={"" + kanban.id}>
+          <DropChild style={{ minHeight: "1rem" }}>
+            <Loading loading={isLoading}>
+              {tasks?.map((task, index) => (
+                <Drag
+                  key={task.id}
+                  draggableId={"task" + task.id}
+                  index={index}
+                >
+                  <DragChild>
+                    <TaskCard task={task} key={task.id} />
+                  </DragChild>
+                </Drag>
+              ))}
+            </Loading>
+          </DropChild>
+        </Drop>
+        <CreateTask kanbanId={kanban.id} />
       </TaskContainer>
     </Container>
   );
@@ -84,6 +102,7 @@ const More = ({ kanban }: { kanban: Kanban }) => {
 
 export const Container = styled.div`
   min-width: 27rem;
+  height: calc(100% - 3rem);
   border-radius: 6px;
   background-color: rgb(244, 245, 247);
   display: flex;
@@ -101,7 +120,6 @@ export const Container = styled.div`
 const TaskContainer = styled.div`
   overflow: scroll;
   flex: 1;
-
   ::-webkit-scrollbar {
     display: none;
   }
